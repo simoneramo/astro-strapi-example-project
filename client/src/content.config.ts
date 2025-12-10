@@ -3,6 +3,7 @@ import { defineCollection } from "astro:content";
 import { strapiLoader } from "strapi-community-astro-loader";
 
 const STRAPI_URL = import.meta.env.VITE_STRAPI_BASE_URL || "http://localhost:1337";
+console.log("[Content Config] Using Strapi URL:", STRAPI_URL);
 
 const blocksPopulate = {
   on: {
