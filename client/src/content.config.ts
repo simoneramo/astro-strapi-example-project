@@ -2,6 +2,8 @@ import type { Loader } from "astro/loaders";
 import { defineCollection } from "astro:content";
 import { strapiLoader } from "strapi-community-astro-loader";
 
+const STRAPI_URL = import.meta.env.VITE_STRAPI_BASE_URL || "http://localhost:1337";
+
 const blocksPopulate = {
   on: {
     "blocks.hero": {
@@ -63,6 +65,7 @@ const blocksPopulate = {
 
 const strapiPosts = defineCollection({
   loader: strapiLoader({
+    strapiUrl: STRAPI_URL,
     contentType: "article",
     params: {
       populate: {
@@ -87,6 +90,7 @@ const strapiPosts = defineCollection({
 
 const strapiPages = defineCollection({
   loader: strapiLoader({
+    strapiUrl: STRAPI_URL,
     contentType: "page",
     params: {
       populate: {
