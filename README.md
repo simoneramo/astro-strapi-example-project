@@ -526,6 +526,82 @@ nvm use 22
    - Review detailed error messages in Vercel deployment logs
    - Common issues: missing environment variables, incorrect Node version, Strapi connection failures
 
+### Content Not Updating After Publishing
+
+**Issue**: Changes in Strapi don't appear on the live site
+
+**Root Cause**: The site is statically generated at build time, so content changes require a rebuild.
+
+**Solutions**:
+
+#### Option 1: Set Up Webhooks (Automatic - Recommended)
+
+1. **Create Vercel Deploy Hook**:
+   - Go to Vercel Project Settings → Git → Deploy Hooks
+   - Click "Create Hook"
+   - Name: `Strapi Content Update`
+   - Branch: `main`
+   - Click "Create Hook" and copy the URL
+
+2. **Configure Strapi Webhook**:
+   - Go to Strapi Admin → Settings → Webhooks
+   - Click "Create new webhook"
+   - **Name**: `Vercel Deploy`
+   - **URL**: Paste the Vercel Deploy Hook URL
+   - **Headers**: Leave empty (not needed)
+   - **Events**: Select these events:
+     - ✅ `entry.create`
+     - ✅ `entry.update`
+     - ✅ `entry.delete`
+     - ✅ `entry.publish`
+     - ✅ `entry.unpublish`
+   - **Enable**: Toggle ON (green)
+   - Click "Save"
+
+3. **Test the Webhook**:
+   - In Strapi, edit and publish any article
+   - Go to Settings → Webhooks → Click your webhook
+   - Scroll down to see "Webhook Logs"
+   - Should show successful POST requests (200 status)
+   - Check Vercel dashboard for a new deployment
+
+**Troubleshooting Webhooks**:
+
+- **Webhook shows errors in Strapi logs**:
+  - Verify the Vercel Deploy Hook URL is correct
+  - Check that the webhook is enabled (green toggle)
+  - Ensure no firewall is blocking outgoing requests from Strapi Cloud
+
+- **Webhook succeeds but no deployment triggered**:
+  - Check Vercel dashboard → Deployments for new builds
+  - Verify the Deploy Hook is for the correct branch (`main`)
+  - Check Vercel project logs for errors
+
+- **Deployment triggered but site not updating**:
+  - Wait 2-3 minutes for build to complete
+  - Check build logs in Vercel for errors
+  - Clear browser cache or try incognito mode
+
+#### Option 2: Manual Rebuild
+
+If webhooks aren't working, manually trigger rebuilds:
+
+1. Go to Vercel Dashboard → Your Project → Deployments
+2. Click "..." on latest deployment → "Redeploy"
+3. Or push any commit to your GitHub repository
+
+#### Option 3: Use Deploy Hook URL Directly
+
+You can also trigger deployments via API:
+
+```bash
+# Using curl
+curl -X POST "YOUR_VERCEL_DEPLOY_HOOK_URL"
+
+# Or create a bookmark in your browser with this URL
+# Click it whenever you want to rebuild
+```
+
 ## ❓ Frequently Asked Questions
 
 ### Can I use a different database besides SQLite?
