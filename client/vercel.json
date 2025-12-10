@@ -1,5 +1,5 @@
 {
-  "buildCommand": "VITE_STRAPI_BASE_URL=https://valuable-sunrise-50399a7a25.strapiapp.com yarn build",
+  "buildCommand": "VITE_STRAPI_BASE_URL=https://valuable-sunrise-50399a7a25.strapiapp.com node wake-strapi.js && VITE_STRAPI_BASE_URL=https://valuable-sunrise-50399a7a25.strapiapp.com yarn build",
   "outputDirectory": "dist",
   "framework": "astro",
   "installCommand": "yarn install"
