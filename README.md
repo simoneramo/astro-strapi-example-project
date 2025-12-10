@@ -11,6 +11,33 @@ Uses the **strapi-community-astro-loader-v2** to seamlessly fetch data from Stra
 - **Frontend (Astro)**: https://client-n0mu8cpps-simons-projects-5e69799b.vercel.app
 - **Backend (Strapi Admin)**: https://valuable-sunrise-50399a7a25.strapiapp.com/admin
 
+## 🛠️ Tech Stack
+
+### Frontend (Astro)
+- **[Astro 5.12.8](https://astro.build)** - Modern web framework with island architecture
+- **[Tailwind CSS 4.0](https://tailwindcss.com)** - Utility-first CSS framework
+- **[strapi-community-astro-loader v2](https://github.com/strapi-community/strapi-astro-loader)** - Content collections loader for Strapi
+- **[Marked](https://marked.js.org/)** - Markdown parser for rich text content
+
+### Backend (Strapi)
+- **[Strapi 5.20](https://strapi.io)** - Headless CMS
+- **SQLite** - Database (local development)
+- **PostgreSQL** - Database (production on Strapi Cloud)
+
+### Deployment
+- **[Vercel](https://vercel.com)** - Frontend hosting and deployment
+- **[Strapi Cloud](https://cloud.strapi.io)** - Backend hosting
+
+### Key Features
+- ✅ Server-Side Rendering (SSR) with Astro
+- ✅ Content Collections with type-safe schemas
+- ✅ Dynamic block-based content system
+- ✅ Image optimization and lazy loading
+- ✅ Responsive design with Tailwind CSS
+- ✅ Hot Module Replacement (HMR) for development
+- ✅ SEO-friendly URLs and metadata
+- ✅ Markdown support for blog content
+
 ## 📋 Prerequisites
 
 Before you begin, ensure you have the following installed:
@@ -138,6 +165,38 @@ astro-strapi-example-project/
 └── README.md
 ```
 
+## 📊 Content Types & Block System
+
+### Strapi Content Types
+
+This project uses the following Strapi content types:
+
+#### Collections
+- **Article**: Blog posts with featured images, authors, tags, and dynamic blocks
+- **Author**: Author profiles with name, bio, and avatar
+- **Tag**: Content tags for categorization
+
+#### Single Types
+- **Landing Page**: Homepage content with dynamic blocks
+- **Page**: Custom pages with flexible block-based content
+- **Global**: Site-wide settings (header, footer, navigation)
+
+### Available Content Blocks
+
+The project includes a flexible block system for building dynamic pages:
+
+1. **Hero Block** - Large hero sections with images and CTAs
+2. **Heading Section** - Section headers and subheadings
+3. **Card Grid** - Responsive grid of cards with images and text
+4. **Content with Image** - Rich content sections with side-by-side images
+5. **FAQ Section** - Accordion-style frequently asked questions
+6. **Person Card** - Author/team member profiles
+7. **Markdown Block** - Rich text content with markdown support
+8. **Featured Articles** - Curated blog post highlights
+9. **Newsletter** - Email subscription forms
+
+All blocks are fully responsive and styled with Tailwind CSS.
+
 ## 🎨 Features
 
 ### Astro Pages
@@ -209,51 +268,62 @@ yarn strapi transfer \
 
 ### Deploy to Vercel
 
-1. **Install Vercel CLI** (if not already installed):
+#### Option 1: Deploy via GitHub Integration (Recommended)
 
-```bash
-npm i -g vercel
-```
+1. **Push your code to GitHub**:
+   ```bash
+   git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
+   git push -u origin main
+   ```
+
+2. **Connect to Vercel**:
+   - Go to [Vercel Dashboard](https://vercel.com/dashboard)
+   - Click "Add New Project"
+   - Import your GitHub repository
+   - Select `client` as the root directory
+
+3. **Configure Node.js Version**:
+   - Go to Project Settings → General
+   - Set Node.js Version to **22.x**
+   - Save changes
+
+4. **Add Environment Variables**:
+   - Go to Project Settings → Environment Variables
+   - Add the following variables for all environments (Production, Preview, Development):
+     - `STRAPI_BASE_URL` = `https://your-project.strapiapp.com`
+     - `VITE_STRAPI_BASE_URL` = `https://your-project.strapiapp.com`
+   - Click "Save"
+
+5. **Trigger Deployment**:
+   - Go to Deployments tab
+   - Click "Redeploy" on the latest deployment
+   - Or push a new commit to trigger auto-deployment
+
+#### Option 2: Deploy via Vercel CLI
+
+1. **Install Vercel CLI** (if not already installed):
+   ```bash
+   npm i -g vercel
+   ```
 
 2. **Login to Vercel**:
-
-```bash
-vercel login
-```
+   ```bash
+   vercel login
+   ```
 
 3. **Deploy from client directory**:
+   ```bash
+   cd client
+   vercel --prod
+   ```
 
-```bash
-cd client
-vercel --prod
-```
+4. **Configure via Dashboard**:
+   - After first deployment, configure Node.js version (22.x) and environment variables in Vercel dashboard as described in Option 1
 
-4. **Set environment variables in Vercel**:
-
-```bash
-# Add Strapi URL for all environments
-echo "https://your-project.strapiapp.com" | vercel env add STRAPI_BASE_URL production
-echo "https://your-project.strapiapp.com" | vercel env add STRAPI_BASE_URL preview
-echo "https://your-project.strapiapp.com" | vercel env add STRAPI_BASE_URL development
-
-# Also add VITE_ prefixed version for client-side
-echo "https://your-project.strapiapp.com" | vercel env add VITE_STRAPI_BASE_URL production
-echo "https://your-project.strapiapp.com" | vercel env add VITE_STRAPI_BASE_URL preview
-echo "https://your-project.strapiapp.com" | vercel env add VITE_STRAPI_BASE_URL development
-```
-
-5. **Redeploy to apply environment variables**:
-
-```bash
-vercel --prod
-```
-
-### Alternative: Deploy via GitHub Integration
-
-1. **Connect your repository** to Vercel
-2. **Set root directory** to `client`
-3. **Add environment variables** in Vercel dashboard
-4. **Push to GitHub** - Vercel will auto-deploy!
+**Important Notes**:
+- The project requires Node.js 22.x - ensure this is set in Vercel project settings
+- Both `STRAPI_BASE_URL` and `VITE_STRAPI_BASE_URL` are required
+- Vercel will automatically redeploy when you push to GitHub (if using GitHub integration)
 
 ## 🔄 Development Workflow
 
@@ -378,6 +448,34 @@ To make content publicly accessible (required for Astro to fetch data):
    - **Author**: `find`, `findOne`
    - **Tag**: `find`, `findOne`
 
+## ⚡ Performance & Best Practices
+
+### Build Optimization
+- **Static Site Generation**: Pages are pre-rendered at build time for optimal performance
+- **Image Optimization**: Images are automatically optimized and served in modern formats
+- **Code Splitting**: JavaScript is split into smaller chunks for faster loading
+- **CSS Purging**: Unused CSS is automatically removed in production builds
+
+### Content Management Best Practices
+1. **Use Proper Image Sizes**: Upload appropriately sized images to Strapi (recommended max width: 2000px)
+2. **Enable Caching**: Configure caching headers in Strapi for better performance
+3. **Content Previews**: Use Strapi's draft/publish workflow for content review
+4. **Backup Regularly**: Export Strapi data periodically using `yarn strapi export`
+
+### Development Tips
+- Use `yarn dev` to run both services simultaneously with hot reload
+- Check Strapi API responses in browser DevTools Network tab
+- Monitor build times and optimize heavy components
+- Test responsive design at different breakpoints
+- Keep dependencies updated for security and performance
+
+### Security Considerations
+- **API Tokens**: Use read-only tokens for public data access
+- **Environment Variables**: Never commit `.env` files to version control
+- **CORS Settings**: Configure proper CORS settings in Strapi for production
+- **Rate Limiting**: Enable rate limiting in Strapi to prevent abuse
+- **HTTPS**: Always use HTTPS in production (automatic with Vercel and Strapi Cloud)
+
 ## 🐛 Troubleshooting
 
 ### Node Version Issues
@@ -407,11 +505,76 @@ nvm use 22
 
 ### Build Failures on Vercel
 
+**Error**: Node.js version incompatibility or build failures
+
 **Solutions**:
-1. Ensure `STRAPI_BASE_URL` environment variable is set in Vercel
-2. Check Node.js version is set to 22.x in `package.json` engines
-3. Verify Strapi Cloud is accessible and API permissions are public
-4. Check build logs for specific error messages
+1. **Set Node.js version in Vercel Dashboard**:
+   - Go to Project Settings → General → Node.js Version
+   - Select **22.x** (critical - Vercel may default to latest version)
+   - Save and redeploy
+
+2. **Configure Environment Variables**:
+   - Ensure both `STRAPI_BASE_URL` and `VITE_STRAPI_BASE_URL` are set in Vercel
+   - Add them in Project Settings → Environment Variables
+   - Values should be your Strapi Cloud URL (e.g., `https://your-project.strapiapp.com`)
+
+3. **Verify Strapi Permissions**:
+   - Check API permissions are set to Public in Strapi admin
+   - Ensure Strapi Cloud URL is accessible
+
+4. **Check Build Logs**:
+   - Review detailed error messages in Vercel deployment logs
+   - Common issues: missing environment variables, incorrect Node version, Strapi connection failures
+
+## ❓ Frequently Asked Questions
+
+### Can I use a different database besides SQLite?
+Yes! Strapi supports PostgreSQL, MySQL, MariaDB, and SQLite. For production, PostgreSQL is recommended (automatically configured on Strapi Cloud). Update `config/database.js` to use your preferred database.
+
+### How do I add a new content type?
+1. Start Strapi: `cd server && yarn develop`
+2. Go to Content-Type Builder in Strapi Admin
+3. Create your new content type
+4. Add fields as needed
+5. Save and the API endpoints are automatically created
+
+### Can I customize the Tailwind theme?
+Yes! Edit `client/tailwind.config.js` to customize colors, fonts, spacing, and more. The project uses Tailwind CSS v4.
+
+### How do I add authentication?
+This example focuses on public content. For authentication, you can:
+- Use Strapi's built-in Users & Permissions plugin
+- Implement JWT authentication
+- Add protected routes in Astro
+- Integrate with third-party auth providers (Auth0, Clerk, etc.)
+
+### What's the difference between STRAPI_BASE_URL and VITE_STRAPI_BASE_URL?
+- `STRAPI_BASE_URL`: Used by server-side code (Astro build, SSR)
+- `VITE_STRAPI_BASE_URL`: Used by client-side code (browser JavaScript)
+- Both should point to the same Strapi instance
+
+### Can I deploy to platforms other than Vercel?
+Yes! Astro supports deployment to:
+- Netlify
+- Cloudflare Pages
+- AWS Amplify
+- GitHub Pages (with adapters)
+- Any Node.js hosting
+
+See [Astro deployment guides](https://docs.astro.build/en/guides/deploy/) for more options.
+
+### How do I update Astro or Strapi versions?
+```bash
+# Update Astro
+cd client
+yarn upgrade astro@latest
+
+# Update Strapi
+cd server
+yarn upgrade @strapi/strapi@latest @strapi/plugin-users-permissions@latest
+```
+
+Always test thoroughly after major version updates.
 
 ## 🤝 Contributing
 
